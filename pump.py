@@ -1,4 +1,4 @@
-# import RPi.GPIO as gp
+import RPi.GPIO as gp
 import time
 import firebase_admin
 from firebase_admin import credentials
@@ -9,9 +9,6 @@ from threading import Thread
 # x15515673
 # Class for controlling the pump
 
-# Variables set up
-# gp.setmode(gp.BOARD)
-# gp.setup(7, gp.OUT)
 
 # Set up Firebase
 def set_up_firebase():
@@ -58,15 +55,16 @@ def activatePump(rateLimit):
 	root_node = db.reference()
 	state_pump = root_node.child("Pump/Information/").update({'state' : "off"})
 	# Turn the relay on, allowing flow
-	# gp.output(7, gp.LOW)
+	gp.setmode(gp.BOARD)
+	gp.setup(7, gp.OUT)
+	gp.output(7, gp.LOW)
 	# # Allow flow until rateLimit
-	# time.sleep(rateLimit)
+	time.sleep(rateLimit)
 	# # Turn relay off
-	# gp.output(7, gp.HIGH)
-	# # Log timestamp into Firebase
+	gp.output(7, gp.HIGH)
 
 	# # cleanup 
-	# gp.cleanup()
+	gp.cleanup()
 
 set_up_firebase()
 listen_for_config_details = Thread(target = listener())
