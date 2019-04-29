@@ -1,4 +1,5 @@
-# import grovepi
+from grovepi import *
+from grove_rgb_lcd import *
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -7,6 +8,8 @@ import random
 import time
 import datetime
 
+# backlight set our background to green
+setRGB(0, 255, 0)
 
 # Set up Firebase
 def set_up_firebase():
@@ -45,10 +48,25 @@ def listener_fb(event):
 # This changes the text on the lcd screen to the time of last watered
 def lcd_change_time_last_watered(last_watered):
 	print("Last Watered")
-
+	try:
+		last_watered_plant = str(last_watered)
+		setText("")
+		setText(last_watered_plant)
+	except (IOError, TypeError) as e:
+		setText("")
+	except KeyboardInterrupt as e:
+		setText("")
 # This changes the text on the lcd screen to the current temperature
-def current_temperature_method():
+def current_temperature_method(current_temperature_converted):
 	print("Current temperature")
+	try:
+		curr_temp = str(current_temperature_converted)
+		setText("")
+		setText_norefresh("Temp: " + curr_temp + "C\n")
+	except (IOError, TypeError) as e:
+		setText("")
+	except KeyboardInterrupt as e:
+		setText("")
 
 set_up_firebase()
 listen_for_config_details = Thread(target = listener())
