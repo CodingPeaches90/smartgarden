@@ -1,10 +1,23 @@
-# import grovepi
+import grovepi
+from grovepi import *
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+
 from threading import Thread
 import random
 import time
+
+
+# Set up variables
+temp_humidity_port = 2
+
+light_sensor_port = 0
+
+soil_port = 1
+
+grovepi.pinMode(light_sensor_port,"INPUT")
 
 humidityState = False
 temperatureState = False
@@ -173,27 +186,45 @@ def soil_publish_firebase():
 # Temperature Sensor
 def temperature_sensor(rateLimit):
 	time.sleep(rateLimit)
-	ran = random.randint(1,20)
-	return ran
+	try:
+		[temp, hum] = dht(temp_humidity_port, 0)
+		print("Current soil is = ", soil_value)
+		temperature = temp
+		return temperature
+	except IOError:
+		return 0
 
 # Humidity
 def humidity_sensor(rateLimit):
-	time.sleep(rateLimit)
-	ran = random.randint(1,20)
-	return ran
+	try:
+		[temp, hum] = dht(temp_humidity_port, 0)
+		print("Current humidity is = ", soil_value)
+		humidity = hum
+		return humidity
+	except IOError:
+		return 0
 
 # Light
 def light_sensor(rateLimit):
 	time.sleep(rateLimit)
-	ran = random.randint(1,20)
-	return ran
+	try:
+		sensor_value = grovepi.analogRead(light_sensor_port)
+		print("Current light is = ", soil_value)
+		values = sensor_value
+		return values
+	except IOError:
+		return 0
 
 # Soil
 def soil_sensor(rateLimit):
 	time.sleep(rateLimit)
-	ran = random.randint(1,20)
-	return ran
-
+	try:
+		soil_value = grovepi.analogRead(soil_port)
+		print("Current soil is = ", soil_value)
+		soil = soil_value
+		return soil
+	except IOError:
+		return 0
 
 listener_thread = Thread(target = listener(), args=(temperature_publish_firebase,))
 listener_thread.start()
