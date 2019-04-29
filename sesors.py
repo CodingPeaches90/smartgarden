@@ -188,7 +188,7 @@ def temperature_sensor(rateLimit):
 	time.sleep(rateLimit)
 	try:
 		[temp, hum] = dht(temp_humidity_port, 0)
-		print("Current soil is = ", soil_value)
+		print("Current temperature is = ", temp)
 		temperature = temp
 		return temperature
 	except IOError:
@@ -198,7 +198,7 @@ def temperature_sensor(rateLimit):
 def humidity_sensor(rateLimit):
 	try:
 		[temp, hum] = dht(temp_humidity_port, 0)
-		print("Current humidity is = ", soil_value)
+		print("Current humidity is = ", hum)
 		humidity = hum
 		return humidity
 	except IOError:
@@ -209,7 +209,7 @@ def light_sensor(rateLimit):
 	time.sleep(rateLimit)
 	try:
 		sensor_value = grovepi.analogRead(light_sensor_port)
-		print("Current light is = ", soil_value)
+		print("Current light is = ", sensor_value)
 		values = sensor_value
 		return values
 	except IOError:
