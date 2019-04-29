@@ -31,20 +31,22 @@ def listener_fb(event):
 	# Make a reference to our state node
 	pump_value_state = db.reference('Pump/Information/state')
 	pump_timer = db.reference('Pump/Information/rateLimit')
+
+	pump_timer = int(pump_timer.get())
 	# now if it is on then we turn the pump on
-	if pump_timer.get() > 1:
+	if pump_timer > 1:
 		# If the pump timer is more than one we know we have a value. Check if it is on
 		if pump_value_state.get() == "on":
 			print("yes")
-			activatePump(pump_timer.get())
+			activatePump(pump_timer)
 		else:
 			print("no")
 	else:
 		print("no")
 
-
 # Activate Pump
 def activatePump(rateLimit):
+	time_integer = int(rateLimit)
 
 	print("Turning on the pump at rate limit ", rateLimit)
 	time.sleep(rateLimit)
