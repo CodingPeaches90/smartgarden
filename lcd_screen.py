@@ -8,6 +8,12 @@ import random
 import time
 import datetime
 
+# Author Jordan May
+# x15515673
+# Code only used to activate the lcd, rest was mine
+# Code sourced from here : https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_rgb_lcd/example.py.
+# Firebase code : https://firebase.google.com/docs/reference/admin/python/firebase_admin
+
 # backlight set our background to green
 setRGB(0, 255, 0)
 
@@ -18,7 +24,7 @@ def set_up_firebase():
 		firebase_admin.initialize_app(fb_credentials, {'databaseURL' : 'https://smartplant-2fc4c.firebaseio.com/'})
 		print("Success")
 	except IOError as e:
-		print("Something went wrong" + e) 
+		print("Something went wrong" + e)
 
 # start listener
 def listener():
@@ -29,7 +35,7 @@ def listener_fb(event):
 	# Check if the user has pressed a button for which state they want
 	lcd_state_which = db.reference('LCD/Information/message')
 	lcd_date = db.reference('LCD/Information/date')
-	
+
 	lcd_date_converted = float(lcd_date.get())
 	last_watered_time = datetime.datetime.fromtimestamp(lcd_date_converted/1000.0)
 

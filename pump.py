@@ -7,6 +7,9 @@ from threading import Thread
 
 # Author Jordan May
 # x15515673
+# Code used to activate the pump -> https://www.youtube.com/watch?v=My1BDB1ei0E&t=239s
+# For hooking up the wiring, i used this -> https://www.hackster.io/ben-eagan/raspberry-pi-automated-plant-watering-with-website-8af2dc
+# # Firebase code : https://firebase.google.com/docs/reference/admin/python/firebase_admin
 # Class for controlling the pump
 
 
@@ -17,7 +20,7 @@ def set_up_firebase():
 		firebase_admin.initialize_app(fb_credentials, {'databaseURL' : 'https://smartplant-2fc4c.firebaseio.com/'})
 		print("Success")
 	except IOError as e:
-		print("Something went wrong" + e) 
+		print("Something went wrong" + e)
 
 # start listener
 def listener():
@@ -51,7 +54,7 @@ def activatePump(rateLimit):
 	print("Turning off pump now!")
 
 	print("Turning state to off")
-	
+
 	root_node = db.reference()
 	state_pump = root_node.child("Pump/Information/").update({'state' : "off"})
 	# Turn the relay on, allowing flow
@@ -63,11 +66,9 @@ def activatePump(rateLimit):
 	# # Turn relay off
 	gp.output(7, gp.HIGH)
 
-	# # cleanup 
+	# # cleanup
 	gp.cleanup()
 
 set_up_firebase()
 listen_for_config_details = Thread(target = listener())
 listen_for_config_details.start()
-
-

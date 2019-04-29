@@ -9,7 +9,14 @@ from threading import Thread
 import random
 import time
 
-
+# Author Jordan May
+# x15515673
+#
+# Code sourced from below, I used only code needed to activate the sensors.
+# Temperature/Humidity Sensor ref : http://wiki.seeedstudio.com/Grove-Temperature_Sensor/
+# Light Sensor ref : http://wiki.seeedstudio.com/Grove-Light_Sensor/
+# Soil ref : https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_moisture_sensor.py.
+# # Firebase code : https://firebase.google.com/docs/reference/admin/python/firebase_admin
 # Set up variables
 temp_humidity_port = 2
 
@@ -26,8 +33,8 @@ try:
 	fb_credentials = credentials.Certificate('smartplant-2fc4c-firebase-adminsdk-gjnsf-78fd7405b8.json')
 	firebase_admin.initialize_app(fb_credentials, {'databaseURL' : 'https://smartplant-2fc4c.firebaseio.com/'})
 	print("Success")
-	global node 
-	# root 
+	global node
+	# root
 	node = db.reference()
 except IOError as e:
 	print("Something went wrong" + e)
@@ -39,9 +46,9 @@ def listener():
 
 # listener for firebase events
 def listener_fb(event):
-	
-	# Make a reference to our state 
-	# Temperature 
+
+	# Make a reference to our state
+	# Temperature
 	temperature_state = db.reference('Temperature/Information/state')
 	temperature_value = db.reference('Temperature/Information/message')
 	temperature_timer = db.reference('Temperature/Information/rateLimit')
@@ -82,7 +89,7 @@ def listener_fb(event):
 		print("Temperature is off")
 		temperatureState = False
 
-	# Check for our humidity 
+	# Check for our humidity
 	if humidity_state.get() == "ON":
 		print("Humidity is on")
 		# global state
@@ -124,7 +131,7 @@ def listener_fb(event):
 		global soilState
 		soilState = True
 
-		try: 
+		try:
 			# start thread
 			soil_thread = Thread(target = soil_publish_firebase)
 			if not soil_thread.isAlive():
@@ -134,7 +141,7 @@ def listener_fb(event):
 			pass
 	else:
 		soilState = False
-		
+
 
 # PUBLISHING TO FIREBASE THE VALUES
 # Publishing temperature
